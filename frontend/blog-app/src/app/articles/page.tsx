@@ -29,39 +29,41 @@ function formatDate(originalDate: string) {
 }
 
 export default function Page() {
-  const { token, setToken } = useAuth();
+  const { user, setUser } = useAuth();
   const [articles, setArticles] = useState<Article[]>([]);
   const [images, setImages] = useState<FinalImagesType>({});
 
   useEffect(() => {
     const url = "https://fullstack.exercise.applifting.cz/articles";
 
-    if (!token) {
+    if (!localStorage.getItem("user")) {
       redirect("/login");
     } else {
-      const config = {
-        headers: {
-          "X-API-KEY": "a91f604b-9e61-408a-a23b-71075b501ed5",
-          Authorization: token,
-        },
-      };
+      if (user) {
+        const config = {
+          headers: {
+            "X-API-KEY": "a91f604b-9e61-408a-a23b-71075b501ed5",
+            Authorization: user.token,
+          },
+        };
 
-      axios
-        .get(url, config)
-        .catch(function (error) {
-          if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          }
-        })
-        .then((response) => {
-          if (response && response.data) {
-            setArticles(response.data.items);
-          }
-        });
+        axios
+          .get(url, config)
+          .catch(function (error) {
+            if (error.response) {
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+            }
+          })
+          .then((response) => {
+            if (response && response.data) {
+              setArticles(response.data.items);
+            }
+          });
+      }
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     // Check if it's first render
@@ -69,44 +71,46 @@ export default function Page() {
       const finalImages: FinalImagesType = {};
 
       // Create an array of Promises
-      const imageRequests = articles.map((article) => {
-        const url = "https://fullstack.exercise.applifting.cz/images/";
-        const endpoint = article.imageId;
-        const config: AxiosRequestConfig = {
-          responseType: "blob",
-          headers: {
-            "X-API-KEY": "a91f604b-9e61-408a-a23b-71075b501ed5",
-            Authorization: token,
-          },
-        };
+      if (user) {
+        const imageRequests = articles.map((article) => {
+          const url = "https://fullstack.exercise.applifting.cz/images/";
+          const endpoint = article.imageId;
+          const config: AxiosRequestConfig = {
+            responseType: "blob",
+            headers: {
+              "X-API-KEY": "a91f604b-9e61-408a-a23b-71075b501ed5",
+              Authorization: user.token,
+            },
+          };
 
-        return axios
-          .get(url + endpoint, config)
-          .then((response) => {
-            if (response && response.data) { 
-              const blob = new Blob([response.data], {
-                type: response.headers["content-type"],
-              }); 
-              const imageUrl = URL.createObjectURL(blob);
-              finalImages[article.articleId] = imageUrl;
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching image:", error);
-          });
-      });
+          return axios
+            .get(url + endpoint, config)
+            .then((response) => {
+              if (response && response.data) {
+                const blob = new Blob([response.data], {
+                  type: response.headers["content-type"],
+                });
+                const imageUrl = URL.createObjectURL(blob);
+                finalImages[article.articleId] = imageUrl;
+              }
+            })
+            .catch((error) => {
+              console.error("Error fetching image:", error);
+            });
+        });
 
-      // Wait for all requests to resolve using Promise.all
-      Promise.all(imageRequests).then(() => {
-        setImages(finalImages);
-        console.log(finalImages);
-      });
+        // Wait for all requests to resolve using Promise.all
+        Promise.all(imageRequests).then(() => {
+          setImages(finalImages);
+          console.log(finalImages);
+        });
+      }
     }
   }, [articles]);
 
   return (
     <div className="mx-auto w-3/5 my-10">
-      {token ? (
+      {user ? (
         <>
           <h1 className="text-2xl font-semibold">Recent articles</h1>
           <ul className="my-5 space-y-4">
@@ -139,7 +143,7 @@ export default function Page() {
           </ul>
         </>
       ) : (
-        <p>Not logged in</p>
+        <p>Loading</p>
       )}
     </div>
   );

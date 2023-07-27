@@ -14,7 +14,7 @@ export default function Page() {
   const usernameRef = useRef("");
   const passwordRef = useRef("");
   const { data, call: login } = useLogin();
-  const { setToken } = useAuth();
+  const { setUser } = useAuth();
 
   const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
     usernameRef.current = event.target.value;
@@ -35,10 +35,14 @@ export default function Page() {
 
   useEffect(() => {
     if (data) {
-      setToken(data.access_token);
+      const user: User = {
+        username: usernameRef.current,
+        token: data.access_token
+      }
+      setUser(user);
       redirect('/articles');
     }
-  }, [data, setToken]);
+  }, [data, setUser]);
 
   return (
     <div className="mx-auto mt-10 w-full bg-white rounded-lg shadow-2xl sm:max-w-md">

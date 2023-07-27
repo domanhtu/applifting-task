@@ -5,10 +5,11 @@ import Image from "next/image";
 import { useAuth } from "@/contexts/authContext";
 
 export default function Navbar() {
-  const { token, setToken } = useAuth();
+  const { user, setUser } = useAuth();
 
   const handleLogout = () => {
-    setToken(null);
+    setUser(null);
+    localStorage.removeItem("user");
   };
 
   return (
@@ -33,7 +34,7 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {token ? (
+      {user ? (
         <Link href="/" onClick={handleLogout} className="mx-5 text-blue-500">
           Logout
           <svg
