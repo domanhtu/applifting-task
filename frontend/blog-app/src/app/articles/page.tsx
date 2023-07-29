@@ -6,17 +6,10 @@ import { useAuth } from "@/contexts/authContext";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import useFetchImage from "@/hooks/useFetchImage";
 
 type FinalImagesType = {
   [articleId: string]: string;
-};
-
-type Article = {
-  articleId: string;
-  title: string;
-  perex: string;
-  createdAt: string;
-  imageId: string;
 };
 
 function formatDate(originalDate: string) {
@@ -32,14 +25,15 @@ export default function Page() {
   const { user, setUser } = useAuth();
   const [articles, setArticles] = useState<Article[]>([]);
   const [images, setImages] = useState<FinalImagesType>({});
+  const fetchImage = useFetchImage();
 
   useEffect(() => {
-    const url = "https://fullstack.exercise.applifting.cz/articles";
-
+    
     if (!localStorage.getItem("user")) {
       redirect("/login");
     } else {
       if (user) {
+        const url = "https://fullstack.exercise.applifting.cz/articles";
         const config = {
           headers: {
             "X-API-KEY": "a91f604b-9e61-408a-a23b-71075b501ed5",
@@ -72,37 +66,16 @@ export default function Page() {
 
       // Create an array of Promises
       if (user) {
-        const imageRequests = articles.map((article) => {
-          const url = "https://fullstack.exercise.applifting.cz/images/";
-          const endpoint = article.imageId;
-          const config: AxiosRequestConfig = {
-            responseType: "blob",
-            headers: {
-              "X-API-KEY": "a91f604b-9e61-408a-a23b-71075b501ed5",
-              Authorization: user.token,
-            },
-          };
-
-          return axios
-            .get(url + endpoint, config)
-            .then((response) => {
-              if (response && response.data) {
-                const blob = new Blob([response.data], {
-                  type: response.headers["content-type"],
-                });
-                const imageUrl = URL.createObjectURL(blob);
-                finalImages[article.articleId] = imageUrl;
-              }
-            })
-            .catch((error) => {
-              console.error("Error fetching image:", error);
-            });
+        const imageRequests = articles.map(async (article) => {
+          const imageUrl = await fetchImage(article.imageId, user.token);
+          if (imageUrl) {
+            finalImages[article.articleId] = imageUrl.imageUrl;
+          }
         });
 
         // Wait for all requests to resolve using Promise.all
         Promise.all(imageRequests).then(() => {
           setImages(finalImages);
-          console.log(finalImages);
         });
       }
     }
@@ -116,23 +89,28 @@ export default function Page() {
           <ul className="my-5 space-y-4">
             {articles.map((article) => (
               <li className="flex space-x-4" key={article.articleId}>
+                {images[article.articleId] ? 
                 <Image
-                  className="h-52 w-52"
-                  src={images[article.articleId]}
-                  alt="No image"
-                  width={208}
-                  height={208}
-                />
+                className="h-52 w-52"
+                src={images[article.articleId]}
+                alt="No image"
+                width={208}
+                height={208}
+              />
+                :
+                <span>Loading image...</span>
+                }
+                
                 <div className="space-y-2">
                   <h2 className="text-lg font-medium">{article.title}</h2>
                   <div className="flex space-x-2 text-gray-500 text-sm">
-                    <span className="">Author</span>
+                    <span>Author</span>
                     <span>•</span>
                     <span>{formatDate(article.createdAt)}</span>
                   </div>
                   <p className="text-sm my-4">{article.perex}</p>
                   <div className="flex space-x-2 text-xs">
-                    <Link href="/" className="text-sky-500">
+                    <Link href={`articles/${article.articleId}`} className="text-sky-500">
                       Read whole article
                     </Link>
                     <span className="text-gray-500">0 comments</span>
@@ -143,7 +121,7 @@ export default function Page() {
           </ul>
         </>
       ) : (
-        <p>Loading</p>
+        <p>Loading articles...</p>
       )}
     </div>
   );
