@@ -52,6 +52,11 @@ export default function Page() {
           })
           .then((response) => {
             if (response && response.data) {
+              response.data.items.sort((a: Article, b: Article) => {
+                const dateA = new Date(a.createdAt);
+                const dateB = new Date(b.createdAt);
+                return dateB.getTime() - dateA.getTime();
+              });
               setArticles(response.data.items);
             }
           });
@@ -82,7 +87,7 @@ export default function Page() {
   }, [articles]);
 
   return (
-    <div className="mx-auto w-3/5 my-10">
+    <div className="mx-auto w-11/12 lg:w-3/5 my-10">
       {user ? (
         <>
           <h1 className="text-2xl font-semibold">Recent articles</h1>
@@ -113,6 +118,7 @@ export default function Page() {
                     <Link href={`articles/${article.articleId}`} className="text-sky-500">
                       Read whole article
                     </Link>
+                    {/* API response doesn't have comments, so you would have to call GET /ArticleDetail/{id} */}
                     <span className="text-gray-500">0 comments</span>
                   </div>
                 </div>

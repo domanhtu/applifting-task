@@ -6,7 +6,7 @@ type Article = {
     imageId: string;
   };
 
-type Comment = {
+type MyComment = {
   commentId: string;
   articleId: string;
   author: string;
@@ -24,5 +24,5 @@ type ArticleDetail = {
     createdAt: string;
     lastUpdatedAt: string;
     content: string;
-    comments: Comment[];
+    comments: MyComment[];
   };
