@@ -10,7 +10,7 @@ type MyComment = {
   commentId: string;
   articleId: string;
   author: string;
-  content: string;
+  content: string | undefined;
   postedAt: string;
   score: number;
 }
