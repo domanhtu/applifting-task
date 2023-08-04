@@ -74,7 +74,7 @@ export default function Page() {
           });
       }
     }
-  }, [user, articles]);
+  }, [user]);
 
   return (
     <div className="mx-auto w-fit my-10">

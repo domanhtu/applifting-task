@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import useFetchImage from "@/hooks/useFetchImage";
+import createAxiosInstance from "@/services/api";
 
 type FinalImagesType = {
   [articleId: string]: string;
@@ -26,22 +27,15 @@ export default function Page() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [images, setImages] = useState<FinalImagesType>({});
   const fetchImage = useFetchImage();
+  const api = createAxiosInstance(user)
 
   useEffect(() => {
     if (!localStorage.getItem("user")) {
       redirect("/login");
     } else {
       if (user) {
-        const url = "https://fullstack.exercise.applifting.cz/articles";
-        const config = {
-          headers: {
-            "X-API-KEY": "a91f604b-9e61-408a-a23b-71075b501ed5",
-            Authorization: user.token,
-          },
-        };
-
-        axios
-          .get(url, config)
+        api
+          .get("articles")
           .catch(function (error) {
             if (error.response) {
               console.log(error.response.data);
