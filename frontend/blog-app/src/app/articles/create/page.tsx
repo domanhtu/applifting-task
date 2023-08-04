@@ -2,7 +2,6 @@
 
 import { useAuth } from "@/contexts/authContext";
 import createAxiosInstance from "@/services/api";
-import { redirect } from "next/navigation";
 import { useRouter } from 'next/navigation'
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 

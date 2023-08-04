@@ -3,7 +3,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/authContext";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import useFetchImage from "@/hooks/useFetchImage";
@@ -24,14 +24,15 @@ function formatDate(originalDate: string) {
 
 export default function Page() {
   const { user, setUser } = useAuth();
+  const router = useRouter();
   const [articles, setArticles] = useState<Article[]>([]);
   const [images, setImages] = useState<FinalImagesType>({});
   const fetchImage = useFetchImage();
-  const api = createAxiosInstance(user)
+  const api = createAxiosInstance(user);
 
   useEffect(() => {
     if (!localStorage.getItem("user")) {
-      redirect("/login");
+      router.push("/login");
     } else {
       if (user) {
         api
@@ -87,18 +88,18 @@ export default function Page() {
           <ul className="my-5 space-y-4">
             {articles.map((article) => (
               <li className="flex space-x-4" key={article.articleId}>
-                {images[article.articleId] ? 
-                <Image
-                className="h-52 w-52"
-                src={images[article.articleId]}
-                alt="No image"
-                width={208}
-                height={208}
-              />
-                :
-                <span>Loading image...</span>
-                }
-                
+                {images[article.articleId] ? (
+                  <Image
+                    className="h-52 w-52"
+                    src={images[article.articleId]}
+                    alt="No image"
+                    width={208}
+                    height={208}
+                  />
+                ) : (
+                  <span>Loading image...</span>
+                )}
+
                 <div className="space-y-2">
                   <h2 className="text-lg font-medium">{article.title}</h2>
                   <div className="flex space-x-2 text-gray-500 text-sm">
@@ -108,7 +109,10 @@ export default function Page() {
                   </div>
                   <p className="text-sm my-4">{article.perex}</p>
                   <div className="flex space-x-2 text-xs">
-                    <Link href={`articles/${article.articleId}`} className="text-sky-500">
+                    <Link
+                      href={`articles/${article.articleId}`}
+                      className="text-sky-500"
+                    >
                       Read whole article
                     </Link>
                     {/* API response doesn't have comments, so you would have to call GET /ArticleDetail/{id} */}

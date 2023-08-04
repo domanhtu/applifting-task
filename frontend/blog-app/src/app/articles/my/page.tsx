@@ -3,12 +3,13 @@
 import { useAuth } from "@/contexts/authContext";
 import createAxiosInstance from "@/services/api";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import DeleteModal from "@/components/deleteModal";
 
 export default function Page() {
   const { user, setUser } = useAuth();
+  const router = useRouter()
   const [articles, setArticles] = useState<Article[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
@@ -50,7 +51,7 @@ export default function Page() {
 
   useEffect(() => {
     if (!localStorage.getItem("user")) {
-      redirect("/login");
+      router.push("/login")
     } else {
       if (user) {
         api

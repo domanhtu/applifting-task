@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { FormEvent, useEffect, useRef, useState } from "react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/authContext";
 import axios from "axios";
 import Image from "next/image";
@@ -15,6 +15,7 @@ export default function Page() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { user, setUser } = useAuth();
   const [image, setImage] = useState("");
+  const router = useRouter()
   const articleId = usePathname();
   const fetchImage = useFetchImage();
   const [dummyComments, setDummyComments] = useState<MyComment[]>([
@@ -122,7 +123,7 @@ export default function Page() {
 
   useEffect(() => {
     if (!localStorage.getItem("user")) {
-      redirect("/login");
+      router.push("/login")
     } else {
       if (user && articleId) {
         const url = "https://fullstack.exercise.applifting.cz";

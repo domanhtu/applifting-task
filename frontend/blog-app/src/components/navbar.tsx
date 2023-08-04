@@ -3,15 +3,17 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/contexts/authContext";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Navbar() {
   const { user, setUser } = useAuth();
   const pathname = usePathname();
+  const router = useRouter()
 
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    router.push("/login")
   };
 
   const isActiveLink = (href: String) => {
