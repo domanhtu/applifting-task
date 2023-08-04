@@ -28,7 +28,6 @@ export default function Page() {
   const fetchImage = useFetchImage();
 
   useEffect(() => {
-    
     if (!localStorage.getItem("user")) {
       redirect("/login");
     } else {

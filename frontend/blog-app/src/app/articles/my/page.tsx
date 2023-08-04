@@ -25,7 +25,7 @@ export default function Page() {
   };
 
   const deleteArticle = (articleId: string) => {
-    if (user) {
+    if (user && selectedArticle) {
       api
         .delete("articles/" + articleId)
         .catch(function (error) {
@@ -37,9 +37,11 @@ export default function Page() {
         })
         .then((response) => {
           if (response && response.status === 204) {
+            // image is deleted too
             setArticles((prevArticles) =>
               prevArticles.filter((article) => article.articleId !== articleId)
             );
+            
             handleCloseModal();
           }
         });
@@ -124,9 +126,10 @@ export default function Page() {
                   <td className="px-4 py-2 border-b">{article.perex}</td>
                   <td className="px-4 py-2 border-b">Author</td>
                   <td className="px-4 py-2 border-b">0</td>
-                  <td className="px-4 py-2 border-b flex space-x-4">
+                  <td className="px-4 py-2 border-b">
+                    <div className="flex space-x-4">
                     <Link
-                      className="py-2 mx-2"
+                      className="mx-2 w-5 h-5"
                       href={`/articles/${article.articleId}/edit`}
                     >
                       <svg
@@ -146,7 +149,7 @@ export default function Page() {
                     </Link>
                     <button
                       onClick={() => handleOpenModal(article)}
-                      className="py-2"
+                      className="mx-2"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -163,6 +166,7 @@ export default function Page() {
                         />
                       </svg>
                     </button>
+                    </div>
                   </td>
                 </tr>
               ))}

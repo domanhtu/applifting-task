@@ -34,7 +34,7 @@ export default function Navbar() {
         <Link
           href="/articles"
           className={`mx-5  ${
-            isActiveLink("/articles") ? "text-blue-500" : ""
+            isActiveLink("/articles") ? "text-blue-500 font-medium" : ""
           }`}
         >
           Recent articles
