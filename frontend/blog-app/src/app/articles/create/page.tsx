@@ -99,7 +99,7 @@ export default function Page() {
       {user ? (
         <>
           <form onSubmit={handleSubmit}>
-            <div className="flex space-x-5 align-items-center">
+            <div className="flex my-2 space-x-5 align-items-center">
               <h1 className="text-4xl font-semibold">Create new article</h1>
               <button
                 type="submit"
