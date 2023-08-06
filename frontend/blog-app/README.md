@@ -1,34 +1,61 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js Blogging App
+
+## Description
+
+This is a blogging app built with Next.js 13 that allows users to create, edit, and delete articles. The app uses a backend provided by Applifting to store and retrieve article data.
+
+## Features
+
+- User authentication: Users can sign up, log in, and log out to manage their articles.
+- Create new articles: Authenticated users can create new articles by providing a title, content, and optional image.
+- Edit and delete articles: Users can edit the title and content of their own articles or delete them entirely.
+- View articles: Users can view a list of their articles and click on individual articles to view the full content.
+
+## Technologies Used
+
+- Next.js 13
+- React
+- TypeScript
+- Applifting Backend API https://github.com/Applifting/fullstack-exercise/blob/master/api.yml
+- Tailwind CSS
+- Axios
+- ...
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+- Node.js (version 18.16.1)
+- npm (version 9.8.0)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+   ```bash
+   git clone https://github.com/domanhtu/applifting_task.git
+   
+2.  Change directory:
 
-## Learn More
+    ```bash
+    cd applifting_task/frontend/blog-app
 
-To learn more about Next.js, take a look at the following resources:
+3.  Install dependencies:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    ```bash
+    npm install
+    
+## Usage
+- Sign up or log in to access your articles.
+- Click on "Create new article" to add a new article with a title, content, and an optional image.
+- Click on the "Edit" button to modify the title and content of an existing article.
+- Click on the "Delete" button to remove an article.
+- View your articles on the home page and click on individual articles to view the full content.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## How to Run the App
+- To run the app locally, follow the installation instructions above. After installing the dependencies, use the following command to start the development server:
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+    ```bash
+    npm run dev
+    
+- This will launch the app at http://localhost:3000 in your browser.

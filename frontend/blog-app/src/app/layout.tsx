@@ -1,13 +1,14 @@
-'use client'
-
 import Navbar from "@/components/navbar";
 import "./globals.css";
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { metadata } from "@/components/metadata"
 import { AuthProvider } from "@/contexts/authContext"
 
 const inter = Inter({ subsets: ["latin"] });
+
+export const metadata = {
+  title: "Blog App",
+  description: "Next 13 blog app for Applifting task",
+};
 
 export default function RootLayout({
   children,

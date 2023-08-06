@@ -1,5 +1,9 @@
 import axios, { AxiosRequestConfig } from "axios";
 
+
+/**
+ * Custom hook for fetching images, returns a promise that needs to be resolved.
+ */
 const useFetchImage = (): ((imageId: string, token: string | null) => Promise<ImageResponse>) => {
   const fetchImage = async (imageId: string, token: string | null): Promise<ImageResponse> => {
     try {

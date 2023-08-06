@@ -9,10 +9,6 @@ import Image from "next/image";
 import useFetchImage from "@/hooks/useFetchImage";
 import createAxiosInstance from "@/services/api";
 
-type FinalImagesType = {
-  [articleId: string]: string;
-};
-
 function formatDate(originalDate: string) {
   const date = new Date(originalDate);
   const day = date.getDate().toString().padStart(2, "0");

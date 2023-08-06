@@ -133,7 +133,7 @@ export default function Page() {
                   className="border p-2"
                   placeholder="Supports markdown. Yay!"
                   rows={5}
-                  cols={80}
+                  cols={45}
                   required
                 ></textarea>
               </div>
@@ -145,7 +145,7 @@ export default function Page() {
                   className="border p-2"
                   placeholder="Supports markdown. Yay!"
                   rows={25}
-                  cols={80}
+                  cols={45}
                   required
                 ></textarea>
               </div>
