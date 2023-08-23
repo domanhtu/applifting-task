@@ -1,7 +1,7 @@
 "use client";
 
 import useLogin from "@/hooks/useLogin";
-import { ChangeEvent, FormEvent, useEffect, useRef } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/contexts/authContext";
 import { redirect } from "next/navigation";
 
@@ -15,6 +15,7 @@ export default function Page() {
   const passwordRef = useRef("");
   const { data, call: login } = useLogin();
   const { setUser } = useAuth();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
     usernameRef.current = event.target.value;
@@ -30,17 +31,22 @@ export default function Page() {
     const username = usernameRef.current;
     const password = passwordRef.current;
 
-    await login(username, password);
+    const status = await login(username, password);
+
+    console.log(status)
+    if (status === 400) {
+      setErrorMessage("Invalid username or password. Please try again.");
+    }
   };
 
   useEffect(() => {
     if (data) {
       const user: User = {
         username: usernameRef.current,
-        token: data.access_token
-      }
+        token: data.access_token,
+      };
       setUser(user);
-      redirect('/articles');
+      redirect("/articles");
     }
   }, [data, setUser]);
 
@@ -84,6 +90,9 @@ export default function Page() {
               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
               required
             />
+            {errorMessage && (
+              <p className="text-red-500 text-sm m-1">{errorMessage}</p>
+            )}
           </div>
           <div className="flex justify-end">
             <button
@@ -92,6 +101,7 @@ export default function Page() {
             >
               Log In
             </button>
+            
           </div>
         </form>
       </div>

@@ -13,7 +13,7 @@ interface ApiResponse {
 const useLogin = () => {
   const [data, setData] = useState<ApiResponse | null>(null);
 
-  const call = useCallback(async (username: string, password: string) => {
+  const call = useCallback(async (username: string, password: string): Promise<number> => {
     const url = "https://fullstack.exercise.applifting.cz/login";
     const config = {
       headers: {
@@ -26,24 +26,21 @@ const useLogin = () => {
       "password": password
     }
 
-    axios
-      .post(url, body, config)
-      .then((response: AxiosResponse<any> | void) => {
-        if (response) {
-          setData(response.data);
-        }
-        else {
-          console.error('Response is void (undefined)');
-        }
-      })
-      .catch(function (error) {
-        if (error.response) {
-          console.log(error.response.data);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        }
-      })
-      ;
+    try {
+      const response: AxiosResponse<any> = await axios.post(url, body, config);
+
+      if (response.status === 200) {
+        setData(response.data);
+      }
+
+      return response.status; 
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        return error.response.status; 
+      }
+
+      return 0;
+    }
   }, []);
 
   return { data, call };
