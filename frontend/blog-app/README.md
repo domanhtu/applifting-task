@@ -51,6 +51,7 @@ This is a blogging app built with Next.js 13 that allows users to create, edit, 
 - Click on the "Edit" button to modify the title and content of an existing article.
 - Click on the "Delete" button to remove an article.
 - View your articles on the home page and click on individual articles to view the full content.
+- You can create your own tenancy on the linked back end, or you can use mine for testing purposes. Username is `domanhtu` and password is `password`.
 
 ## How to Run the App
 - To run the app locally, follow the installation instructions above. After installing the dependencies, use the following command to start the development server:
